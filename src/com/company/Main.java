@@ -32,15 +32,8 @@ public class Main {
 
         secretKey = getSecretKey(file, password.toCharArray(), keyAlias);
 
-        String mode = encryptionMode.split("/")[1];
-
-        switch (mode) {
-            case "CBC":
-            case "CTR":
-                ctrEncryption(encryptionMode, secretKey);
-                ctrDecryption(encryptionMode, secretKey);
-                break;
-        }
+        ctrEncryption(encryptionMode, secretKey);
+        ctrDecryption(encryptionMode, secretKey);
 
     }
 
@@ -53,7 +46,6 @@ public class Main {
 
             // generate a secret key for AES encryption
             SecretKey secretKey = KeyGenerator.getInstance("AES").generateKey();
-            System.out.println(secretKey.getAlgorithm());
             KeyStore.SecretKeyEntry keyStoreEntry = new KeyStore.SecretKeyEntry(secretKey);
             KeyStore.PasswordProtection keyPassword = new KeyStore.PasswordProtection(password);
             keyStore.setEntry(keyAlias, keyStoreEntry, keyPassword);
@@ -142,8 +134,6 @@ public class Main {
     }
     //endregion
     //endregion
-
-
 
 
 }
