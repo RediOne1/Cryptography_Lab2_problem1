@@ -6,12 +6,15 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import java.io.*;
 import java.security.KeyStore;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
 
     private static byte[] iv = new byte[]{0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xA, 0xB, 0xC, 0xD, 0xE, 0xF};
-    private static String inputFileName = "test";
+    private static String file1 = "test";
+    private static String file2 = "test2";
+    private static String inputFileName;
 
     public static void main(String[] args) {
         if (args.length != 3)
@@ -32,8 +35,14 @@ public class Main {
 
         secretKey = getSecretKey(file, password.toCharArray(), keyAlias);
 
-        ctrEncryption(encryptionMode, secretKey);
-        ctrDecryption(encryptionMode, secretKey);
+        if(file2 == null)
+            inputFileName = file1;
+        else {
+            inputFileName = new Random().nextBoolean() ? file1 : file2;
+        }
+
+        encryption(encryptionMode, secretKey);
+        decryption(encryptionMode, secretKey);
 
     }
 
@@ -79,9 +88,8 @@ public class Main {
     }
     //endregion
 
-    //region CTR / CBC
     //region encryption
-    private static void ctrEncryption(String encryptionMode, SecretKey secretKey) {
+    private static void encryption(String encryptionMode, SecretKey secretKey) {
         try {
 
             FileInputStream fileInputStream = new FileInputStream(new File(inputFileName));
@@ -109,7 +117,7 @@ public class Main {
     //endregion
 
     //region decryption
-    private static void ctrDecryption(String encryptionMode, SecretKey secretKey) {
+    private static void decryption(String encryptionMode, SecretKey secretKey) {
         try {
             FileInputStream fileInputStream = new FileInputStream(new File("encrypted_" + inputFileName));
             BufferedInputStream reader = new BufferedInputStream(fileInputStream);
@@ -133,7 +141,4 @@ public class Main {
         }
     }
     //endregion
-    //endregion
-
-
 }
